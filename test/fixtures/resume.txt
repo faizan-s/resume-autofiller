@@ -1,0 +1,21 @@
+FAIZAN A. KHAN
+Senior Software Engineer
+San Francisco, CA 94105
+faizan.khan@example.com | (415) 555-0123
+linkedin.com/in/faizankhan | github.com/faizankhan
+
+SUMMARY
+Software engineer with 8 years of experience building distributed backend systems.
+
+EXPERIENCE
+Senior Software Engineer — Acme Technologies, Inc. (Mar 2021 - Present)
+  - Led migration of the payments platform to Go; cut p99 latency 40%.
+Software Engineer, Globex LLC (Jun 2018 - Feb 2021)
+  - Built the internal deployment tooling used by 12 teams.
+Junior Developer, Initech Co. (Jul 2016 - May 2018)
+
+EDUCATION
+B.S. in Computer Science, University of California, Berkeley, 2016
+
+SKILLS
+Go, Python, TypeScript, PostgreSQL, Kubernetes, gRPC

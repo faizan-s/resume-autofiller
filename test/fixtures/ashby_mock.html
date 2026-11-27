@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><title>Ashby mock (fixture)</title></head>
+<body>
+<h2>Product Designer (Ashby fixture)</h2>
+
+<div class="field"><label for="name">Your name</label><input id="name" name="name" autocomplete="name" /></div>
+
+<!-- Fields inside an open shadow root: only reachable by piercing shadow roots -->
+<ashby-form id="shadow-host"></ashby-form>
+
+<script>
+const host = document.getElementById('shadow-host');
+const sr = host.attachShadow({ mode: 'open' });
+sr.innerHTML =
+  '<div class="field"><label for="sh-email">Email address</label><input id="sh-email" type="email" /></div>' +
+  '<div class="field"><label for="sh-resume">Resume (PDF only)</label><input type="file" id="sh-resume" accept=".pdf" /></div>' +
+  '<div class="field"><label for="sh-salary">Expected compensation</label><input id="sh-salary" type="text" /></div>';
+</script>
+</body>
+</html>

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><title>Greenhouse mock (fixture)</title></head>
+<body>
+<h2>Senior Software Engineer &mdash; Greenhouse (fixture)</h2>
+
+<form id="app-form">
+  <h3>Contact Information</h3>
+  <div class="field"><label for="first_name">First Name</label><input id="first_name" name="first_name" type="text" data-react="1" /></div>
+  <div class="field"><label for="last_name">Last Name</label><input id="last_name" name="last_name" type="text" /></div>
+  <div class="field"><label for="email">Email Address</label><input id="email" name="email" type="email" autocomplete="email" data-react="1" /></div>
+  <!-- label wraps the control, no for/id -->
+  <div class="field"><label>Phone Number <span>*</span></label><input type="tel" name="phone" placeholder="(555) 555-5555" /></div>
+  <div class="field"><label for="city">City</label><input id="city" name="city" autocomplete="address-level2" /></div>
+  <div class="field"><label for="state">State</label><select id="state" name="state"><option value="">Choose state</option><option value="CA">California</option><option value="NY">New York</option></select></div>
+
+  <!-- Greenhouse custom questions: the profile has values for these -->
+  <div class="field"><label for="job_title">Current Title</label><input id="job_title" name="job_title" type="text" /></div>
+  <div class="field"><label for="employer">Current Employer</label><input id="employer" name="employer" type="text" /></div>
+  <div class="field"><label for="years_exp">Years of Experience</label><input id="years_exp" name="years_exp" type="number" /></div>
+  <div class="field"><label for="github">GitHub Profile</label><input id="github" name="github" type="url" /></div>
+  <div class="field"><label for="skills">Skills</label><input id="skills" name="skills" type="text" /></div>
+  <div class="field"><label for="school">School / University</label><input id="school" name="school" type="text" /></div>
+  <div class="field"><label for="major">Major / Field of study</label><input id="major" name="major" type="text" /></div>
+  <div class="field"><label for="grad_year">Graduation Year</label><input id="grad_year" name="grad_year" type="number" /></div>
+  <div class="field"><label for="zip">Postal Code</label><input id="zip" name="zip" autocomplete="postal-code" /></div>
+  <div class="field"><label for="street">Address</label><input id="street" name="street" autocomplete="street-address" /></div>
+
+  <fieldset><legend>Work Authorization</legend>
+    <p>Are you legally authorized to work in the United States?</p>
+    <input type="radio" name="work_auth" id="wa_yes" value="yes" /><label for="wa_yes">Yes</label>
+    <input type="radio" name="work_auth" id="wa_no" value="no" /><label for="wa_no">No</label>
+  </fieldset>
+
+  <div class="field"><label for="sponsorship">Will you now or in the future require sponsorship for an employment visa?</label>
+    <select id="sponsorship" name="sponsorship"><option value="">--</option><option value="yes">Yes</option><option value="no">No</option></select></div>
+
+  <div class="field"><label for="education">Highest level of education completed</label>
+    <select id="education" name="education"><option value="">Select</option><option value="hs">High School</option><option value="bs">Bachelor's</option><option value="ms">Master's</option></select></div>
+
+  <div class="field"><label for="salary">Desired salary (range)</label><input id="salary" name="salary" type="text" /></div>
+  <div class="field"><label for="notice">Notice period</label><input id="notice" name="notice" type="text" /></div>
+  <div class="field"><label for="linkedin">LinkedIn Profile</label><input id="linkedin" name="linkedin" type="url" autocomplete="url" /></div>
+  <div class="field"><label for="comments">Additional comments</label><textarea id="comments" name="comments"></textarea></div>
+
+  <!-- Custom ARIA combobox: input nested in a widget with a listbox -->
+  <div class="field"><label for="relocate">Relocation</label>
+    <div role="combobox" aria-expanded="false" aria-controls="relocate-list">
+      <input role="combobox" id="relocate" name="work_location" aria-label="Are you willing to relocate?" aria-controls="relocate-list" />
+      <ul role="listbox" id="relocate-list">
+        <li role="option" data-value="yes">Yes, willing to relocate</li>
+        <li role="option" data-value="no">No, not willing to relocate</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="field"><label for="resume">Resume</label><input type="file" id="resume" name="resume" accept=".pdf,.docx,.txt,.md" /></div>
+
+  <!-- EEO / demographic section: must never be filled without opt-in -->
+  <fieldset><legend>Self-Identification (voluntary)</legend>
+    <label for="gender">Gender</label><select id="gender" name="gender"><option value="">--</option><option value="m">Male</option><option value="f">Female</option></select>
+    <label for="vet">Veteran status</label><select id="vet" name="vet"><option value="">--</option><option value="yes">Veteran</option><option value="no">Not a veteran</option></select>
+    <label for="race">Race / Ethnicity</label><select id="race" name="race"><option value="">--</option><option value="1">Asian</option><option value="2">White</option></select>
+    <label for="dob">Date of birth</label><input id="dob" name="dob" type="date" />
+  </fieldset>
+
+  <button type="submit">Submit application</button>
+</form>
+
+<script>
+// React-sim: a faithful mimic of React 16+ value tracking, the mechanism the native-setter trick
+// depends on. React redefines `value` on the instance and keeps a tracker in sync, so a plain
+// `el.value = v` leaves the tracker fresh and React skips onChange. Writing through the prototype
+// descriptor bypasses the instance override, so the next input event fires the site's onChange.
+window.__reactState = {};
+window.reactTrack = function (node) {
+  const desc = Object.getOwnPropertyDescriptor(Object.getPrototypeOf(node), 'value');
+  const tracker = { value: node.value };
+  Object.defineProperty(node, 'value', {
+    configurable: true,
+    get() { return desc.get.call(node); },
+    set(v) { desc.set.call(node, v); tracker.value = node.value; },
+  });
+  node.addEventListener('input', () => {
+    if (node.value === tracker.value) return;   // React skips onChange when the tracker is fresh
+    tracker.value = node.value;
+    window.__reactState[node.id || node.name] = node.value;
+  });
+};
+document.querySelectorAll('[data-react]').forEach((el) => window.reactTrack(el));
+</script>
+</body>
+</html>

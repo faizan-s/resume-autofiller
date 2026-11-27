@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><title>Lever mock (fixture)</title></head>
+<body>
+<form>
+  <h3>Application details</h3>
+  <!-- aria-labelledby labels -->
+  <div class="field">
+    <span id="lbl-first">Full Name</span>
+    <input type="text" id="f" aria-labelledby="lbl-first" />
+  </div>
+  <div class="field"><input type="email" id="e" name="email" aria-label="Email" /></div>
+  <div class="field"><input type="tel" name="phone" aria-label="Phone number" /></div>
+  <!-- Lever links -->
+  <div class="field"><label for="ln">LinkedIn URL</label><input id="ln" name="ln" type="url" /></div>
+  <div class="field"><label for="gh">Github profile</label><input id="gh" name="gh" type="url" /></div>
+  <div class="field"><label for="pf">Portfolio website</label><input id="pf" name="pf" type="url" /></div>
+
+  <div class="field"><label for="loc">Where are you located? (city, state)</label><input id="loc" name="loc" /></div>
+
+  <!-- Radio group under a fieldset legend -->
+  <fieldset><legend>Are you authorized to work in the US?</legend>
+    <input type="radio" name="auth" id="a1" value="yes" /><label for="a1">Yes</label>
+    <input type="radio" name="auth" id="a2" value="no" /><label for="a2">No</label>
+  </fieldset>
+
+  <fieldset><legend>Veteran status</legend>
+    <input type="radio" name="vet" id="v1" value="yes" /><label for="v1">Yes</label>
+    <input type="radio" name="vet" id="v2" value="no" /><label for="v2">No</label>
+  </fieldset>
+
+  <div class="field"><label for="cv">Resume / CV upload</label><input type="file" id="cv" name="cv" /></div>
+  <div class="field"><label for="why">Why do you want to work here?</label><textarea id="why" name="why"></textarea></div>
+
+  <!-- Invisible filler input: must not appear in the panel -->
+  <input type="hidden" name="csrf" value="token" />
+  <input type="hidden" name="req_id" value="123" />
+</form>
+</body>
+</html>

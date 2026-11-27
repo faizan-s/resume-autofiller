@@ -1,0 +1,36 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title>Resume Autofill — Options</title><link rel="stylesheet" href="options.css"></head>
+<body>
+  <h1>Resume Autofill</h1>
+  <p class="note">Everything stays in this browser. No network calls, no telemetry, no server.</p>
+
+  <section>
+    <h2>1. Import your resume</h2>
+    <input type="file" id="file" accept=".pdf,.docx,.txt,.md" />
+    <div id="msg" class="note"></div>
+    <p class="note">PDF text order can be wrong on multi-column layouts. Fix the fields below — the
+      parsed profile, not the file, is what fills the form. The file itself is kept for resume-upload fields.</p>
+  </section>
+
+  <section>
+    <h2>2. Edit the profile</h2>
+    <div id="editor"></div>
+    <button id="save">Save profile</button>
+  </section>
+
+  <section>
+    <h2>3. Learned mappings</h2>
+    <p class="note">When you remap a field in the review panel, it is remembered for that hostname and
+      applied before the ontology on later visits.</p>
+    <table id="learned"><thead><tr><th>Host</th><th>Field</th><th>Key</th><th></th></tr></thead><tbody></tbody></table>
+    <button id="wipe">Wipe all data (profile, resume file, learned mappings)</button>
+  </section>
+
+  <script src="../shared/schema.js"></script>
+  <script src="../shared/parse.js"></script>
+  <script src="../lib/pdf.min.js"></script>
+  <script src="../lib/mammoth.browser.min.js"></script>
+  <script src="options.js"></script>
+</body>
+</html>

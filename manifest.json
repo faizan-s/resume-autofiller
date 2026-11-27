@@ -1,0 +1,17 @@
+{
+  "manifest_version": 3,
+  "name": "Resume Autofill",
+  "version": "1.0.0",
+  "description": "Reads your resume, maps job application fields, and fills them after you review. Nothing leaves your browser.",
+  "permissions": ["storage", "unlimitedStorage", "activeTab", "scripting", "webNavigation"],
+  "optional_permissions": [
+    "*://*.greenhouse.co/*", "*://*.lever.co/*", "*://*.ashbyhq.com/*", "*://*.workday.com/*",
+    "*://*.myworkdayjobs.com/*", "*://*.smartrecruiters.com/*", "*://*.icims.com/*", "*://*.taleo.net/*",
+    "*://*.jobvite.com/*", "*://*.zoho.com/*", "*://*.bamboohr.com/*", "*://*.recruitee.com/*"
+  ],
+  "background": { "service_worker": "src/background.js" },
+  "action": { "default_popup": "src/popup/popup.html", "default_title": "Resume Autofill" },
+  "options_ui": { "page": "src/options/options.html", "open_in_tab": true },
+  "content_security_policy": { "extension_pages": "script-src 'self'; object-src 'self'" },
+  "minimum_chrome_version": "111"
+}

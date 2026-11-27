@@ -1,0 +1,11 @@
+body { max-width: 880px; margin: 24px auto; font: 14px/1.5 system-ui, sans-serif; color: #222; padding: 0 16px; }
+h1 { font-size: 20px; }
+h2 { font-size: 15px; margin: 22px 0 6px; }
+h3 { font-size: 13px; margin: 12px 0 4px; color: #444; }
+.note { color: #555; font-size: 12px; }
+.fld { display: grid; grid-template-columns: 180px 1fr; gap: 8px; align-items: center; margin: 3px 0; }
+.fld input { border: 1px solid #ccc; border-radius: 4px; padding: 4px; width: 100%; }
+table { border-collapse: collapse; width: 100%; margin: 8px 0; }
+th, td { text-align: left; padding: 4px 6px; border-bottom: 1px solid #eee; font-size: 12px; }
+button { padding: 6px 10px; border: 1px solid #999; background: #eee; border-radius: 6px; cursor: pointer; }
+button.danger { background: #f6d6d6; border-color: #c99; }

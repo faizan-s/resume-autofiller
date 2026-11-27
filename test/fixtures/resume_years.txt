@@ -1,0 +1,16 @@
+NADIA PATEL
+Senior Analyst
+Austin, TX
+nadia.patel@example.com | (512) 555-0198
+
+EXPERIENCE
+Senior Analyst, Contoso Analytics (Jan 2015 - Dec 2019)
+  - Built the forecasting model the pricing team uses weekly.
+Analyst, Initech Co. (Jan 2012 - Jun 2014)
+  - Automated the monthly reconciliation, saving 30 hours a month.
+
+EDUCATION
+M.S. in Statistics, Texas State University, 2008
+
+SKILLS
+Python, SQL, Tableau, R

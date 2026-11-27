@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Resume Autofiller - browser spike (DataTransfer, React, ARIA widget)</title>
+<style>
+  body { font: 14px/1.5 system-ui, sans-serif; margin: 24px; max-width: 720px; }
+  .field { margin: 10px 0; }
+  #results li { list-style: none; }
+  #results .PASS { color: #1b7f35; }
+  #results .FAIL { color: #b3261e; }
+  .drop-zone { border: 2px dashed #bbb; padding: 18px; text-align: center; color: #666; }
+</style>
+</head>
+<body>
+<h2>Browser spike: the paths jsdom cannot prove</h2>
+<p>Open this file in Chrome and press <b>Run</b>. The MAIN-world content files load as plain
+scripts, so this page exercises the same code the extension injects: DataTransfer file attach
+(jsdom has no DataTransfer), a drop-zone uploader, a React-controlled input, and an ARIA combobox
+that renders its matching option only after typing. Read the list after running: a
+<code>FAIL</code> line means the fill engine lied about a field.</p>
+
+<button id="run" style="padding:6px 12px">Run</button>
+<ul id="results"></ul>
+
+<form>
+  <div class="field"><label for="s-name">Full Name</label><input id="s-name" name="s_name" data-react="1" /></div>
+
+  <fieldset><legend>Are you authorized to work in the US?</legend>
+    <input type="radio" name="s_auth" id="s_auth_y" value="yes" /><label for="s_auth_y">Yes</label>
+    <input type="radio" name="s_auth" id="s_auth_n" value="no" /><label for="s_auth_n">No</label>
+  </fieldset>
+
+  <div class="field"><input type="checkbox" id="s_consent" name="s_consent" aria-label="Consent to data processing" />
+    <label for="s_consent">I consent to the processing of my personal data</label></div>
+
+  <div class="field"><label for="s-combo">Where do you want to work?</label>
+    <div role="combobox" aria-expanded="false" aria-controls="s-list">
+      <input role="combobox" id="s-combo" name="s_location" aria-label="Where do you want to work?" aria-controls="s-list" />
+      <ul role="listbox" id="s-list"></ul>
+    </div>
+  </div>
+
+  <div class="field"><label for="s-resume">Resume</label><input type="file" id="s-resume" accept=".pdf,.docx" /></div>
+
+  <div class="field"><label for="s-drop">Resume drop zone</label>
+    <div id="s-drop" class="drop-zone" aria-label="Drop your resume file here">
+      <span>Drag &amp; drop your CV here</span>
+    </div>
+  </div>
+</form>
+<script src="../src/content/detect.js"></script>
+<script src="../src/content/match.js"></script>
+<script src="../src/content/fill.js"></script>
+
+<script>
+// An ARIA combobox that renders a matching option 150ms after typing, the shape fill.js's
+// MutationObserver path is built for. A real widget commits the value on click.
+const CITIES = ['San Francisco', 'New York', 'Austin', 'Remote'];
+const list = document.getElementById('s-list');
+const combo = document.getElementById('s-combo');
+combo.addEventListener('input', (e) => {
+  list.innerHTML = '';
+  const typed = e.target.value.trim().toLowerCase();
+  if (!typed) return;
+  setTimeout(() => {
+    for (const c of CITIES) {
+      if (!c.toLowerCase().startsWith(typed)) continue;
+      const li = document.createElement('li');
+      li.setAttribute('role', 'option');
+      li.setAttribute('data-value', c);
+      li.textContent = c;
+      li.addEventListener('click', () => { combo.value = c; window.__comboClicked = c; });
+      list.appendChild(li);
+    }
+    combo.setAttribute('aria-expanded', 'true');
+  }, 150);
+});
+
+// A drop-zone uploader: creates the file input on drop, like Workday and Ashby do. Assignment is
+// legal here because page and input share one realm; cross-realm assignment throws.
+window.__dropFiles = null;
+document.getElementById('s-drop').addEventListener('drop', (e) => {
+  const inp = document.createElement('input');
+  inp.type = 'file'; inp.name = 's_drop_file'; inp.id = 's-drop-inner';
+  inp.files = e.dataTransfer.files;
+  document.getElementById('s-drop').appendChild(inp);
+  window.__dropFiles = Array.from(inp.files);
+});
+
+// React-sim value tracker, identical to the Greenhouse fixture: a plain el.value = v leaves the
+// tracker fresh, so onChange never fires. Only the native-setter path fires it.
+window.__reactState = {};
+window.reactTrack = function (node) {
+  const desc = Object.getOwnPropertyDescriptor(Object.getPrototypeOf(node), 'value');
+  const tracker = { value: node.value };
+  Object.defineProperty(node, 'value', {
+    configurable: true,
+    get() { return desc.get.call(node); },
+    set(v) { desc.set.call(node, v); tracker.value = node.value; },
+  });
+  node.addEventListener('input', () => {
+    if (node.value === tracker.value) return;
+    tracker.value = node.value;
+    window.__reactState[node.id || node.name] = node.value;
+  });
+};
+document.querySelectorAll('[data-react]').forEach((el) => window.reactTrack(el));
+
+// The resume exactly as the options page stores it: base64 in chrome.storage, not a typed array.
+const STORED = {
+  name: 'resume.pdf',
+  mime: 'application/pdf',
+  dataUrl: 'data:application/pdf;base64,' + btoa('%PDF-1.4\nspike resume bytes\n'),
+};
+const EXPECT_SIZE = atob(STORED.dataUrl.split(',')[1]).length;
+</script>
+<script>
+const out = document.getElementById('results');
+const check = (name, ok, detail) => {
+  const li = document.createElement('li');
+  li.className = ok ? 'PASS' : 'FAIL';
+  li.textContent = (ok ? 'PASS ' : 'FAIL ') + name + (detail ? ' - ' + detail : '');
+  out.appendChild(li);
+  window.__spikeFail = (window.__spikeFail || 0) + (ok ? 0 : 1);
+};
+
+async function runSpike() {
+  window.__spikeFail = 0;
+  window.__comboClicked = null;
+  window.__dropFiles = null;
+  out.innerHTML = '';
+  const fields = RAF.detect.scan(document);
+  const byId = (id) => fields.find((f) => f.id === id);
+  const ctx = { file: STORED, eeoOptIn: false };
+
+  const nameStatus = RAF.fill.fillField(byId('s-name'), 'Faizan Khan', ctx);
+  check('text fill fires the React onChange of a tracked input',
+    nameStatus === 'filled' && window.__reactState['s-name'] === 'Faizan Khan', nameStatus);
+
+  const radios = byId('s_auth_y').radios;
+  const radioStatus = RAF.fill.fillField(byId('s_auth_y'), 'Yes', ctx);
+  check('radio group fills from the fieldset legend + Yes label',
+    radioStatus === 'filled' && document.getElementById('s_auth_y').checked
+      && radios.filter((r) => r.checked).length === 1, radioStatus);
+
+  const cbStatus = RAF.fill.fillField(byId('s_consent'), 'yes', ctx);
+  check('checkbox ends checked (activation behaviour, not a double toggle)',
+    cbStatus === 'filled' && document.getElementById('s_consent').checked, cbStatus);
+
+  const comboStatus = await RAF.fill.fillField(byId('s-combo'), 'San Francisco', ctx);
+  check('ARIA combobox: the option the widget renders after typing is clicked and the value lands',
+    comboStatus === 'filled' && window.__comboClicked === 'San Francisco' && combo.value === 'San Francisco',
+    comboStatus + '; widget recorded ' + window.__comboClicked);
+
+  const fileStatus = RAF.fill.fillField(byId('s-resume'), '', ctx);
+  const f = document.getElementById('s-resume').files[0];
+  check('DataTransfer attach from the stored base64 produces the right File',
+    fileStatus === 'filled' && f && f.name === STORED.name && f.type === STORED.mime && f.size === EXPECT_SIZE,
+    fileStatus + '; got ' + (f ? f.name + ' ' + f.size + ' bytes ' + f.type : 'no file'));
+
+  const dropStatus = RAF.fill.fillField(byId('s-drop'), '', ctx);
+  const dropped = window.__dropFiles && window.__dropFiles[0];
+  check('drop-zone uploader receives the file on the drop event',
+    dropStatus === 'needs-verify' && dropped && dropped.name === STORED.name,
+    dropStatus + '; ' + (dropped ? dropped.name : 'nothing dropped'));
+
+  if (!window.__spikeFail) console.log('spike: all checks passed');
+}
+document.getElementById('run').addEventListener('click', () => runSpike());
+</script>
+</body>
+</html>

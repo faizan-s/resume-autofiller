@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><title>SmartRecruiters mock (fixture)</title></head>
+<body>
+<section>
+  <h3>Your application</h3>
+  <input aria-label="Full name" name="fullName" />
+  <input aria-label="E-mail" type="email" name="email" />
+
+  <!-- Drop-zone uploader: no input[type=file] in the markup -->
+  <div id="resume-drop" class="drop-zone" aria-label="Drop your resume file here or click to upload">
+    <span>Drag &amp; drop your CV here</span>
+  </div>
+
+  <div class="field"><label for="sr-loc">Location (city, country)</label><input id="sr-loc" /></div>
+  <div class="field"><label for="sr-link">Profile link (LinkedIn)</label><input id="sr-link" type="url" /></div>
+  <label for="sr-qa">Tell us about your work</label>
+  <div contenteditable="true" id="sr-qa" role="textbox" aria-label="Tell us about your work"></div>
+
+  <div class="field"><input type="checkbox" id="consent" name="consent" aria-label="Consent to data processing" />
+    <label for="consent">I consent to the processing of my personal data</label></div>
+</section>
+</body>
+</html>

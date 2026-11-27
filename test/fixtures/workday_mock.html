@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><title>Workday mock (fixture)</title></head>
+<body>
+<form>
+  <h2>External Experiences &mdash; Workday (fixture)</h2>
+  <table>
+    <tr><td class="label"><label for="da-first-name">First Name</label></td><td><input id="da-first-name" name="da_first_name" /></td></tr>
+    <tr><td class="label"><label for="da-last-name">Last Name</label></td><td><input id="da-last-name" name="da_last_name" /></td></tr>
+    <tr><td class="label"><label for="da-email">Email</label></td><td><input id="da-email" type="email" autocomplete="email" /></td></tr>
+    <tr><td class="label"><label for="da-phone">Mobile Phone Number</label></td><td><input id="da-phone" type="tel" /></td></tr>
+
+    <!-- Workday comboboxes render their option list only after interaction -->
+    <tr><td class="label"><label id="da-country-lbl" for="da-country">Country of residence</label></td>
+        <td><input role="combobox" aria-labelledby="da-country-lbl" aria-expanded="false" id="da-country" name="da_country" /></td></tr>
+    <tr><td class="label"><label id="da-auth-lbl" for="da-auth">Do you have the legal right to work in the US?</label></td>
+        <td><input role="combobox" aria-labelledby="da-auth-lbl" aria-expanded="false" id="da-auth" name="da_auth" /></td></tr>
+
+    <!-- Workday uploads land in a drop zone, not an input[type=file] -->
+    <tr><td class="label"><label for="da-resume-file">Resume</label></td>
+        <td><div id="da-resume-file" class="drop-zone" aria-label="Drop your resume file here"><span>Drag &amp; drop</span></div></td></tr>
+
+    <tr><td class="label"><label for="wd-sponsor">Do you require visa sponsorship?</label></td>
+        <td><select id="wd-sponsor" name="wd_sponsor"><option value="">Select&hellip;</option><option value="Y">Yes</option><option value="N">No</option></select></td></tr>
+    <tr><td class="label"><label for="wd-salary">Desired total compensation</label></td><td><input id="wd-salary" /></td></tr>
+    <tr><td class="label"><label for="wd-notice">Notice period</label></td><td><input id="wd-notice" /></td></tr>
+    <tr><td class="label"><label for="wd-union">Union member</label></td>
+        <td><select id="wd-union"><option value="">Select&hellip;</option><option>Yes</option><option>No</option></select></td></tr>
+    <tr><td class="label"><label for="wd-ssn">Social Security Number</label></td><td><input id="wd-ssn" name="ssn" /></td></tr>
+  </table>
+</form>
+</body>
+</html>

@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><title>iCIMS mock (fixture)</title></head>
+<body>
+<table class="icims">
+  <tr><th colspan="2">Personal Information</th></tr>
+  <tr><td><label for="first_name">First Name:</label></td><td><input id="first_name" name="custom_1" /></td></tr>
+  <tr><td><label for="last_name">Last Name:</label></td><td><input id="last_name" name="custom_2" /></td></tr>
+  <tr><td><label for="email">Email:</label></td><td><input id="email" type="email" name="email" /></td></tr>
+  <tr><td><label for="phone">Work Phone:</label></td><td><input id="phone" type="tel" name="phone" /></td></tr>
+  <tr><td><label id="ic-edu-lbl" for="education">Education Level:</label></td>
+      <td><select id="education" name="custom_9" aria-labelledby="ic-edu-lbl">
+        <option value="">-Select an option-</option>
+        <option value="10">High School / GED</option>
+        <option value="20">Bachelor's Degree</option>
+      </select></td></tr>
+  <tr><td><label for="auth_y">Are you authorized to work in the US without sponsorship:</label></td>
+      <td><input type="radio" name="auth" id="auth_y" value="Y" /><label for="auth_y">Yes</label>
+          <input type="radio" name="auth" id="auth_n" value="N" /><label for="auth_n">No</label></td></tr>
+  <tr><td><label for="resume">Upload Resume:</label></td><td><input type="file" id="resume" name="resume" /></td></tr>
+  <tr><td><label for="compensation">Current compensation:</label></td><td><input id="compensation" name="custom_11" /></td></tr>
+</table>
+</body>
+</html>

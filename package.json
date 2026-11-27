@@ -1,0 +1,13 @@
+{
+  "name": "resume-autofiller",
+  "version": "1.0.0",
+  "private": true,
+  "type": "commonjs",
+  "scripts": {
+    "test": "node test/run.js"
+  },
+  "devDependencies": {
+    "jsdom": "^31.0.1"
+  }
+}
+
